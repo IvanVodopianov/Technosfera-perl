@@ -37,8 +37,10 @@ my %uniq;
 
 #p @list;
 
-my @members = 'A'..'Z';
+my @members = 'AAAA'..'ZZZZ';
+#my @members = 'АА'..'ЯЯ';
 my %members; @members{@members} = ();
+#p %members;
 my @pairs;
 for (1..@members/4) {
 	my ($one,$two) = keys %members;
@@ -47,9 +49,15 @@ for (1..@members/4) {
 	push @pairs, [ $one, $two ];
 }
 
-my @list = sort { int(rand 3)-1 } @pairs, keys %members;
+my @list1 = sort { int(rand 3)-1 } @pairs, keys %members;
 
-my @res = SecretSanta::calculate(@list);
+#p @members;
+#p %members;
+#p @pairs;
+#p @list1;
+#say keys %members;
+
+my @res = SecretSanta::calculate(@list1);
 
 for (@res) {
 	say join "→", @$_;
