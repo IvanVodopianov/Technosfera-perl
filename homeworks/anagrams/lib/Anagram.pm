@@ -1,8 +1,10 @@
 package Anagram;
 
 use 5.010;
+#use encoding "UTF-8";
 use strict;
 use warnings;
+
 
 =encoding UTF8
 
@@ -40,14 +42,44 @@ anagram(['пятак', 'ЛиСток', 'пятка', 'стул', 'ПяТаК', '
 =cut
 
 sub anagram {
-    my $words_list = shift;
-    my %result;
+    my $arr_ref = shift;
 
     #
-    # Поиск анограмм
+    # Поиск анаграмм
     #
 
-    return \%result;
+my $href = {};
+
+my $pattern = '';
+my $found = 0;
+
+$href->{ lc($arr_ref->[0]) } = []; #initializaion
+
+foreach my $word ( @{$arr_ref} ) {
+  $word = lc($word);
+	$found = 0 ;
+	$pattern = '';
+	$pattern = join('',$pattern,'[',$word,']') for 1..length($word);
+	foreach my $key (keys %{$href}) {
+	  if ( $key =~ m($pattern) ) {
+		  push @{ $href->{$key} }, $word unless grep {$word eq $_} @{ $href->{$key} };
+			$found = 1;
+			last;
+		}
+	}
+
+  if ( $found != 1 ) {
+	  $href->{$word} = [];
+		push @{ $href->{$word} }, $word;
+	}
+}
+
+foreach my $key (keys %{$href}) {
+  if ( $#{$href->{$key}} < 1 ) {
+	  delete $href->{$key};
+	}
+}
+    return $href;
 }
 
 1;

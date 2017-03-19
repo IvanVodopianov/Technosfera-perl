@@ -1,7 +1,9 @@
 #!/usr/bin/env perl
 
+#use encoding "UTF-8";
 use strict;
 use warnings;
+
 BEGIN{
 	if ($] < 5.018) {
 		package experimental;
@@ -17,11 +19,12 @@ use Anagram;
 use Test::More;
 use Data::Dumper;
 
-use constant RESULT => "{'слиток' => ['листок','слиток','столик'],'пятка' => ['пятак','пятка','тяпка']}";
+#use constant RESULT => "{'слиток' => ['листок','слиток','столик'],'пятка' => ['пятак','пятка','тяпка']}";
+use constant RESULT => "{'пятка' => ['пятка','пятак','тяпка'],'слиток' => ['слиток','листок','столик']}";
 
 plan tests => 1;
 
-my $result = Anagram::anagram([qw(пятка слиток пятак ЛиСток стул ПяТаК тяпка столик слиток)]);
+my $result = Anagram::anagram([qw(пятка слиток пятак листок стул ПяТаК тяпка столик слиток)]);
 my $dump = Data::Dumper->new([$result])->Purity(1)->Terse(1)->Indent(0)->Sortkeys(1);
 
 is($dump->Dump, RESULT, "example");
