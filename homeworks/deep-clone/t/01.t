@@ -94,114 +94,114 @@ my $cycle3 = [0];
 $cycle3->[1][0][0] = $cycle3;
 
 my $TESTS = [
-#    {
-#		    name => 'simple undef',
-#				orig => undef,
-#				},
-#		{
-#		    name => 'simple num',
-#				orig => 10,
-#				},
-#		{
-#		    name => 'simple string',
-#				orig => 'string',
-#				},
-#		{
-#		    name => 'simple zero',
-#				orig => 0,
-#				},
-#		{
-#		    name => 'simple empty string',
-#				orig => '',
-#				},
-#		{
-#		    name => 'nums array',
-#				orig => [ 1, 2, 3, 4 ],
-#				modifier => sub { $_[0]->[0] = 'a' },
-#				},
-#		{
-#		    name => 'strings array',
-#				orig => [ qw/a b c d e f/ ],
-#				modifier => sub { $_[0]->[0] = 1 },
-#				},
-#		{
-#		    name => 'combined array',
-#				orig => [ 1, 2, qw/a b c d e f/, 3, 4 ],
-#				modifier => sub { $_[0]->[0] = undef },
-#				},
-#		{
-#		    name => 'simple hash',
-#				orig => { a => 1, b => 2, c => 'x', d => 'y', 1 => 1, 2 => 2, 3 => 'v1', 4 => 'v2' },
-#				modifier => sub { $_[0]->{a} = 10 },
-#				},
-#		{
-#		    name => 'array of hashes',
-#				orig => [ { a => 1, b => 2}, { c => 3, d => 4 } ],
-#				modifier => sub { $_[0]->[1]{c} = 10 },
-#				},
-#		{
-#		    name => 'hash of arrays',
-#				orig => { a => [ 1, 2, 3 ], b => [ 4, 5, 6 ] },
-#				modifier => sub { $_[0]->{b}[1] = 10 },
-#				},
-#		{
-#		    name => 'complex struct',
-#				orig => {
-#				    a => [ 1, 2, 3 ],
-#						b => { c => 4, d => 5 },
-#						e => [
-#						    {
-#								    k1 => 'v1',
-#										k2 => [ qw/a b c/],
-#										k3 => undef,
-#										k4 => { kk1 => 'x', kk2 => 'y' },
-#										},
-#								[ qw/x1 x2 x3/ ],
-#								undef,
-#								1, 2, 3, qw/a b c/,
-#								],
-#						f => {
-#						    k1 => 'v1',
-#								k2 => [ qw/a b c/ ],
-#								k3 => undef,
-#								k4 => { kk1 => 'x', kk2 => 'y', kk3 => [ qw/a b c/ ], kk4 => { a => 1, b => 2 } },
-#								},
-#						g => 1,
-#						h => 'string',
-#						i => undef,
-#						},
-#				modifier => sub { $_[0]->{f}{k4}{kk3}[1] = 10 },
-#				},
-#		{
-#		    name => 'sub ref',
-#				orig => sub {},
-#				want_undef => 1,
-#				},
-#    {
-#        name => 'complex with sub ref',
-#        orig => [ 1, 2, 3, { a => 1, b => 2, c => [ qw/x y z/, sub {} ] } ],
-#        want_undef => 1,
-#				}#,
     {
-		    name => 'cycle array',
+		    name => 'simple undef',
+				orig => undef,
+				},
+		{
+		    name => 'simple num',
+				orig => 10,
+				},
+		{
+		    name => 'simple string',
+				orig => 'string',
+				},
+		{
+		    name => 'simple zero',
+				orig => 0,
+				},
+		{
+		    name => 'simple empty string',
+				orig => '',
+				},
+		{
+		    name => 'nums array',
+				orig => [ 1, 2, 3, 4 ],
+				modifier => sub { $_[0]->[0] = 'a' },
+				},
+		{
+		    name => 'strings array',
+				orig => [ qw/a b c d e f/ ],
+				modifier => sub { $_[0]->[0] = 1 },
+				},
+		{
+		    name => 'combined array',
+				orig => [ 1, 2, qw/a b c d e f/, 3, 4 ],
+				modifier => sub { $_[0]->[0] = undef },
+				},
+		{
+		    name => 'simple hash',
+				orig => { a => 1, b => 2, c => 'x', d => 'y', 1 => 1, 2 => 2, 3 => 'v1', 4 => 'v2' },
+				modifier => sub { $_[0]->{a} = 10 },
+				},
+		{
+		    name => 'array of hashes',
+				orig => [ { a => 1, b => 2}, { c => 3, d => 4 } ],
+				modifier => sub { $_[0]->[1]{c} = 10 },
+				},
+		{
+		    name => 'hash of arrays',
+				orig => { a => [ 1, 2, 3 ], b => [ 4, 5, 6 ] },
+				modifier => sub { $_[0]->{b}[1] = 10 },
+				},
+		{
+		    name => 'complex struct',
+				orig => {
+				    a => [ 1, 2, 3 ],
+						b => { c => 4, d => 5 },
+						e => [
+						    {
+								    k1 => 'v1',
+										k2 => [ qw/a b c/],
+										k3 => undef,
+										k4 => { kk1 => 'x', kk2 => 'y' },
+										},
+								[ qw/x1 x2 x3/ ],
+								undef,
+								1, 2, 3, qw/a b c/,
+								],
+						f => {
+						    k1 => 'v1',
+								k2 => [ qw/a b c/ ],
+								k3 => undef,
+								k4 => { kk1 => 'x', kk2 => 'y', kk3 => [ qw/a b c/ ], kk4 => { a => 1, b => 2 } },
+								},
+						g => 1,
+						h => 'string',
+						i => undef,
+						},
+				modifier => sub { $_[0]->{f}{k4}{kk3}[1] = 10 },
+				},
+		{
+		    name => 'sub ref',
+				orig => sub {},
+				want_undef => 1,
+				},
+				{
+				name => 'complex with sub ref',
+				orig => [ 1, 2, 3, { a => 1, b => 2, c => [ qw/x y z/, sub {} ] } ],
+				want_undef => 1,
+				},
+				{
+				name => 'cycle array',
 				orig => $CYCLE_ARRAY,
 				modifier => sub { $_[0]->[20] = 10 },
-				}#,
-#    {
-#        name => 'cycle hash',
-#        orig => $CYCLE_HASH,
-#        modifier => sub { $_[0]->{new_key} = 10 },
-#    },
-#    {
-#        name => 'cycle hash2',
-#        orig => $CYCLE_HASH2,
-#        modifier => sub { $_[0]->{new_key} = 10 },
-#    },
-#    {
-#        name => 'deepcycle',
-#        orig => $cycle3,
-#        modifier => sub { $_[0]->[0] = 42 },
-#    }
+				},
+				{
+				name => 'cycle hash',
+				orig => $CYCLE_HASH,
+				modifier => sub { $_[0]->{new_key} = 10 },
+				},
+				{
+				name => 'cycle hash2',
+				orig => $CYCLE_HASH2,
+				modifier => sub { $_[0]->{new_key} = 10 },
+				},
+		{
+		    name => 'deepcycle',
+				orig => $cycle3,
+				modifier => sub { $_[0]->[0] = 42 },
+				}
 ];
 
 test_deep($_) for @$TESTS;
