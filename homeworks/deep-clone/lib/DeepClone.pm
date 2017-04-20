@@ -109,7 +109,8 @@ if ( check($_, $param) == 0 ) {return 0;}
 sub clone_cycle {
 #  my $href = shift;
   my $ref_copied = shift;
-	my $this = shift;
+  my $this = shift;
+#  my $dest = shift;
 
 #  if ( check($this,1) == 0 ) { return undef; }
   if ( ref \$this eq "SCALAR" ) {
@@ -151,6 +152,7 @@ sub clone {
 my $this = shift;
 if (check_cycle($this)) {
 my $href = {};
+#my $aref = [];
 $href->{$this}=1;
 return clone_cycle($href,$this);
 }
