@@ -72,10 +72,12 @@ sub collect_refs {
 			foreach my $v (values %{$aref}) {
 			  collect_refs($href, $v);
 			}
+
 		}
 		else {
 		  $href->{$aref}++;
 		}
+
 	}
 	return $href;
 }
@@ -144,18 +146,6 @@ sub clone1 {
 	}
 }
 sub clone {
-<<<<<<< HEAD
-my $this = shift;
-if (check_cycle($this)) {
-my $href = {};
-#my $aref = [];
-$href->{$this}=1;
-return clone_cycle($href,$this);
-}
-else {
-return clone1($this);
-}
-=======
   my $this = shift;
 	if (check_if_cycle($this)) {
 	  my $href = {};
@@ -165,7 +155,6 @@ return clone1($this);
 	else {
 	  return clone1($this);
 	}
->>>>>>> 9b73fc82eb4f6cbef4f62d41c002cce6b0985e98
 }
 
 1;
