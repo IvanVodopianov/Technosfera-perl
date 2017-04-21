@@ -37,20 +37,32 @@ sub check_if_cycle {
   my $aref = shift;
 	my $href = {};
 	$href = collect_refs($href, $aref);
-	  if (defined $aref) {
-		  if ($href->{$aref} > 1) {return 1;}
+	if (defined $aref) {
+	  if (exists $href->{$aref}) {
+		  if ($href->{$aref} > 1) { return 1; }
 		}
+	}
 	return 0;
 }
 sub collect_refs {
   my $href = shift;
 	my $aref = shift;
-	if ((ref \$aref eq "SCALAR") or (!defined $aref)) {
-	  unless (exists $href->{$aref}) {
-		  $href->{$aref} = 1;
-		}
-		else {
-		  $href->{$aref}++;
+
+  if (ref \$aref eq "SCALAR") {
+
+    if (not defined $aref) {
+		  unless (exists $href->{'undef'}) {
+			  $href->{'undef'} = 1;
+			} else {
+			  $href->{'undef'}++;
+			}
+
+    } else {
+		    unless (exists $href->{$aref}) {
+				  $href->{$aref} = 1;
+				}	else {
+				  $href->{$aref}++;
+				}
 		}
 	}
 

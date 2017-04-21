@@ -74,12 +74,12 @@ my $href = {};
 my $pattern = '';
 my $found = 0;
 
-$href -> { lc(decode('utf8',$arr_ref->[0])) } = []; #initializaion
+#$href -> { lc(decode('utf8',$arr_ref->[0])) } = []; #initializaion
 
 foreach my $word ( @{$arr_ref} ) {
-  $word = lc($word);
-  my $decoded_word = decode('utf8',$word);
-
+#  my $word1 = lc($word);
+  my $decoded_word = lc(decode('utf8',$word));
+#say "word: ",lc($word1), " ", $decoded_word;
 	$found = 0 ;
         $pattern = "";
 #        $pattern = join('',$pattern,'[',$word,']') for 1..length($word);
@@ -90,7 +90,7 @@ foreach my $word ( @{$arr_ref} ) {
 #          say "decoded_key: ",$decoded_key;
 #            say "key: ",$key;
           if ( $key =~ m($pattern) ) {
-                  push @{ $href->{$key} }, $word unless grep {$word eq $_} @{ $href->{$key} };
+					        push @{ $href->{$key} }, encode('utf8',$decoded_word) unless grep {encode('utf8',$decoded_word) eq $_} @{ $href->{$key} };
 			$found = 1;
 			last;
 		}
@@ -98,7 +98,7 @@ foreach my $word ( @{$arr_ref} ) {
 
   if ( $found != 1 ) {
           $href->{$decoded_word} = [];
-                push @{ $href->{$decoded_word} }, $word;
+					      push @{ $href->{$decoded_word} }, encode('utf8',$decoded_word);
 #                say "word: ", $word;
 	}
 }
