@@ -33,140 +33,153 @@ use warnings;
 Элементами ссылок на массив или хеш, не могут быть ссылки на массивы и хеши исходной структуры данных.
 
 =cut
+
 sub check_if_cycle {
-  my $aref = shift;
-	my $href = {};
-	$href = collect_refs($href, $aref);
-	if (defined $aref) {
-	  if (exists $href->{$aref}) {
-		  if ($href->{$aref} > 1) { return 1; }
-		}
-	}
-	return 0;
+    my $aref = shift;
+    my $href = {};
+    $href = collect_refs( $href, $aref );
+    if ( defined $aref ) {
+        if ( exists $href->{$aref} ) {
+            if ( $href->{$aref} > 1 ) { return 1; }
+        }
+    }
+    return 0;
 }
+
 sub collect_refs {
-  my $href = shift;
-	my $aref = shift;
+    my $href = shift;
+    my $aref = shift;
 
-  if (ref \$aref eq "SCALAR") {
+    if ( ref \$aref eq "SCALAR" ) {
 
-    if (not defined $aref) {
-		  unless (exists $href->{'undef'}) {
-			  $href->{'undef'} = 1;
-			} else {
-			  $href->{'undef'}++;
-			}
+        if ( not defined $aref ) {
+            unless ( exists $href->{'undef'} ) {
+                $href->{'undef'} = 1;
+            }
+            else {
+                $href->{'undef'}++;
+            }
 
-    } else {
-		    unless (exists $href->{$aref}) {
-				  $href->{$aref} = 1;
-				}	else {
-				  $href->{$aref}++;
-				}
-		}
-	}
+        }
+        else {
+            unless ( exists $href->{$aref} ) {
+                $href->{$aref} = 1;
+            }
+            else {
+                $href->{$aref}++;
+            }
+        }
+    }
 
-  if (ref $aref eq "ARRAY") {
-	  unless (exists $href->{$aref}) {
-		  $href->{$aref} = 1;
-			foreach (@{$aref}) {
-			  collect_refs($href, $_);
-			}
-		}
-		else {
-		  $href->{$aref}++;
-		}
+    if ( ref $aref eq "ARRAY" ) {
+        unless ( exists $href->{$aref} ) {
+            $href->{$aref} = 1;
+            foreach ( @{$aref} ) {
+                collect_refs( $href, $_ );
+            }
+        }
+        else {
+            $href->{$aref}++;
+        }
 
-  }
-	if ( ref $aref eq "HASH" ) {
-	  unless (exists $href->{$aref}) {
-		  $href->{$aref} = 1;
-			foreach my $v (values %{$aref}) {
-			  collect_refs($href, $v);
-			}
+    }
+    if ( ref $aref eq "HASH" ) {
+        unless ( exists $href->{$aref} ) {
+            $href->{$aref} = 1;
+            foreach my $v ( values %{$aref} ) {
+                collect_refs( $href, $v );
+            }
 
-		}
-		else {
-		  $href->{$aref}++;
-		}
+        }
+        else {
+            $href->{$aref}++;
+        }
 
-	}
-	return $href;
+    }
+    return $href;
 }
+
 sub check_for_members {
-  my $this = shift;
-	my $param = shift;
+    my $this  = shift;
+    my $param = shift;
 
-  if ( (ref $this) eq "ARRAY" ) {
-	  foreach (@{ $this} ) {
-		  if ( check_for_members($_, $param) == 0 ) {return 0;}
-		}
-  }
+    if ( ( ref $this ) eq "ARRAY" ) {
+        foreach ( @{$this} ) {
+            if ( check_for_members( $_, $param ) == 0 ) { return 0; }
+        }
+    }
 
-  if ( (ref $this) eq "HASH" ) {
-	  foreach (values %{ $this } ) {
-		  if ( check_for_members($_, $param) == 0) {return 0;}
-		}
-	}
+    if ( ( ref $this ) eq "HASH" ) {
+        foreach ( values %{$this} ) {
+            if ( check_for_members( $_, $param ) == 0 ) { return 0; }
+        }
+    }
 
-  if ( (ref \$this) eq "SCALAR" ) { $param = 1; }
-  if (  (ref $this) eq "CODE" ) { $param = 0; }
+    if ( ( ref \$this ) eq "SCALAR" ) { $param = 1; }
+    if ( ( ref $this ) eq "CODE" )    { $param = 0; }
 
-	return $param;
+    return $param;
 }
+
 sub clone_cycle {
-  my $ref_copied = shift;
-  my $this = shift;
-#  my $dest = shift;
+    my $ref_copied = shift;
+    my $this       = shift;
 
-  if ( ref \$this eq "SCALAR" ) {
-	  return $this;
-	}
-	elsif ( ref $this eq "ARRAY" ) {
-	  if ($ref_copied->{$this} < 1) {
-		  $ref_copied->{$this} = 1;
-			return [ map clone_cycle($ref_copied,$_), @{ $this } ];
-		}
-		else {
-		my $tmp = [];
-		foreach (@$this) { push @$tmp, $_ };
-		return $tmp;
-		}
-	}
+    if ( ref \$this eq "SCALAR" ) {
+        return $this;
+    }
+    elsif ( ref $this eq "ARRAY" ) {
+        if ( $ref_copied->{$this} < 1 ) {
+            $ref_copied->{$this} = 1;
+            return [ map clone_cycle( $ref_copied, $_ ), @{$this} ];
+        }
+        else {
+            my $tmp = [];
+            foreach (@$this) { push @$tmp, $_ }
+            return $tmp;
+        }
+    }
 
-  elsif ( ref $this eq "HASH" ) {
-	  if ($ref_copied->{$this} < 1) {
-		  $ref_copied->{$this} = 1;
-			return (scalar { map { $_ => clone_cycle($ref_copied,$this->{$_}) } keys %{ $this } });
-		}
-		else {
-		  my $tmp = {};
-			foreach (keys %$this) { $tmp->{$_} = $this->{$_} };
-			return $tmp;
-		}
-	}
+    elsif ( ref $this eq "HASH" ) {
+        if ( $ref_copied->{$this} < 1 ) {
+            $ref_copied->{$this} = 1;
+            return (
+                scalar {
+                    map { $_ => clone_cycle( $ref_copied, $this->{$_} ) }
+                      keys %{$this}
+                }
+            );
+        }
+        else {
+            my $tmp = {};
+            foreach ( keys %$this ) { $tmp->{$_} = $this->{$_} }
+            return $tmp;
+        }
+    }
 }
+
 sub clone1 {
-  my $this = shift;
-	if ( check_for_members($this,1) == 0 ) { return undef; }
-	if ( ref \$this eq "SCALAR" ) { return $this;}
-	elsif ( ref $this eq "ARRAY" ) {
-	  return [ map clone1($_), @{ $this } ];
-	}
-	elsif ( ref $this eq "HASH" ) {
-	  return (scalar { map { $_ => clone1($this->{$_}) } keys %{ $this } });
-	}
+    my $this = shift;
+    if ( check_for_members( $this, 1 ) == 0 ) { return undef; }
+    if ( ref \$this eq "SCALAR" ) { return $this; }
+    elsif ( ref $this eq "ARRAY" ) {
+        return [ map clone1($_), @{$this} ];
+    }
+    elsif ( ref $this eq "HASH" ) {
+        return ( scalar { map { $_ => clone1( $this->{$_} ) } keys %{$this} } );
+    }
 }
+
 sub clone {
-  my $this = shift;
-	if (check_if_cycle($this)) {
-	  my $href = {};
-		$href->{$this}=1;
-		return clone_cycle($href,$this);
-	}
-	else {
-	  return clone1($this);
-	}
+    my $this = shift;
+    if ( check_if_cycle($this) ) {
+        my $href = {};
+        $href->{$this} = 1;
+        return clone_cycle( $href, $this );
+    }
+    else {
+        return clone1($this);
+    }
 }
 
 1;
