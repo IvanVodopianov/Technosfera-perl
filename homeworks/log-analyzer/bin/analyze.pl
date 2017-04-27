@@ -51,6 +51,7 @@ sub parse_file {
 
     my $href_time = {};
     my $href_status = {};
+		my $href_count = {};
 
     my $result = [];
 
@@ -74,6 +75,10 @@ sub parse_file {
 
     unless (exists $href_status->{$ip_address}) {$href_status->{$ip_address} = {};}
 
+    unless (exists $href_count->{$ip_address}) {$href_count->{$ip_address} = 1;}
+
+    $href_count->{$ip_address} += 1;
+
     $time_stamp =~ $time_stamp_regex;
     my $h = $4;
     my $m = $5;
@@ -90,12 +95,13 @@ sub parse_file {
     push @{$href_status->{$ip_address}->{$code}}, $tmp;
 #        push @{$href->{$ip_address}}, $h*3600+$m*60+$s;
 
-    if ($i++ > 15) {last;}
+    if ($i++ > 150) {last;}
 
     }
     close $fd;
-#                p $href_time;
-                p $href_status;
+#		            p $href_time;
+#                p $href_status;
+                p $href_count;
     # you can put your code here
     push @{$result}, $href_time, $href_status;
 
@@ -107,13 +113,13 @@ sub report {
     say "from report:";
     say ref @{$result}[0];
     say ref @{$result}[1];
-    my $href_time = @{$result}[0];
-    my $href_time_count_avg = {};
-    p $href_time;
-    foreach (keys %$href_time) {
-    unless (exists $href_time_count_avg->{$_}) {exists $href_time_count_avg->{$_} = {};}
-    foreach (values)
-    }
+#    my $href_time = @{$result}[0];
+#    my $href_time_count_avg = {};
+#    p $href_time;
+#    foreach (keys %$href_time) {
+#    unless (exists $href_time_count_avg->{$_}) {exists $href_time_count_avg->{$_} = {};}
+#    foreach (values)
+#    }
 
     # you can put your code here
 
