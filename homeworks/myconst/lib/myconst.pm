@@ -8,25 +8,39 @@ use DDP;
 #use Data::Dumper;
 
 #use Exporter 'import';
-our $params;
+#our $params;
 #say @_;
 #say Dumper \%params;
 #p \%params;
-our @EXPORT = qw(m2 m3 pi zero);
-our %EXPORT_TAGS = (
-all => [qw(m1 m2 m3)],
-math => [qw(m1 m2)],
-phys => [qw(m3)],
-);
-our $zero = 0;
-our $pi = 3.13;
+#our @EXPORT = qw(m2 m3 pi zero);
+#our %EXPORT_TAGS = (
+#all => [qw(m1 m2 m3)],
+#math => [sub pii {3.222}, sub eee {222.222}],
+#phys => [qw(m3)],
+#);
+#our $zero = 0;
+#our $pi = 3.13;
 sub m1 { shift() ** 1 }
 sub m2 { shift() ** 2 }
 sub m3 { shift() ** 3 }
 #sub zero { shift() }
-#sub pi { shift() }
+#sub pi { 3.1111 }
 sub import {
-p @_;
+our %EXPORT_TAGS = (pii => [&(sub {1.111})],);
+p %EXPORT_TAGS;
+p %EXPORT_TAGS{pii};
+#p @_;
+my($package_name, %params) = @_;
+p %params;
+while (my ($k,$v) = each %params) {
+if (ref \$v eq 'SCALAR') {say 'scalar: ', $k, $v;}
+if (ref $v eq 'HASH') {
+  while (my ($k1,$v1) = each %{$v}) {
+	say 'hash: ', $k1, $v1;
+	}
+#say 'all: ', $v;
+}
+}
 }
 #my ($package, %params) = @_;
 #$params = $msg;
